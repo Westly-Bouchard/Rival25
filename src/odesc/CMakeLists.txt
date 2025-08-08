@@ -1,8 +1,11 @@
 cmake_minimum_required(VERSION 3.15)
+
+# This is just so the CI runner won't complain
 if(POLICY CMP0167)
   cmake_policy(SET CMP0167 NEW)
 endif()
 
+# Start ROS Package Build
 project(odesc)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")

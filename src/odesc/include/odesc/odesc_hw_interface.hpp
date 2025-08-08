@@ -17,8 +17,20 @@ namespace odesc {
 
         ODescHwInterface();
 
+        /**
+         * @brief Parses parameters and joint information from urdf
+         * 
+         * @param info information from <ros2_control> tag in urdf
+         * @return CallbackReturn SUCCESS or ERROR
+         */
         CallbackReturn on_init(const hardware_interface::HardwareInfo& info) override;
 
+        /**
+         * @brief 
+         * 
+         * @param previous_state 
+         * @return CallbackReturn 
+         */
         CallbackReturn on_configure(const rclcpp_lifecycle::State& previous_state) override;
         CallbackReturn on_activate(const rclcpp_lifecycle::State& previous_state) override;
         CallbackReturn on_deactivate(const rclcpp_lifecycle::State& previous_state) override;
