@@ -46,7 +46,7 @@ namespace odesc {
     }
 
 
-    CallbackReturn ODescHwInterface::on_configure(const rclcpp_lifecycle::State& previous_state) {
+    CallbackReturn ODescHwInterface::on_configure(const rclcpp_lifecycle::State& /*previous_state*/) {
         // Obtain file descriptor
         bus_fd = socket(PF_CAN, static_cast<int32_t>(SOCK_RAW), CAN_RAW);
 
@@ -95,11 +95,11 @@ namespace odesc {
 
     }
 
-    CallbackReturn ODescHwInterface::on_activate(const rclcpp_lifecycle::State& previous_state) {}
+    CallbackReturn ODescHwInterface::on_activate(const rclcpp_lifecycle::State& /*previous_state*/) { return CallbackReturn::SUCCESS; }
 
-    CallbackReturn ODescHwInterface::on_deactivate(const rclcpp_lifecycle::State& previous_state) {}
+    CallbackReturn ODescHwInterface::on_deactivate(const rclcpp_lifecycle::State& /*previous_state*/) { return CallbackReturn::SUCCESS; }
 
-    CallbackReturn ODescHwInterface::on_cleanup(const rclcpp_lifecycle::State& previous_state) {
+    CallbackReturn ODescHwInterface::on_cleanup(const rclcpp_lifecycle::State& /*previous_state*/) {
         // Shut down rx thread
         rx_running = false;
         if (rx_thread.joinable()) {
@@ -116,19 +116,19 @@ namespace odesc {
     }
 
 
-    CallbackReturn ODescHwInterface::on_shutdown(const rclcpp_lifecycle::State& previous_state) {}
+    CallbackReturn ODescHwInterface::on_shutdown(const rclcpp_lifecycle::State& /*previous_state*/) { return CallbackReturn::SUCCESS; }
 
-    CallbackReturn ODescHwInterface::on_error(const rclcpp_lifecycle::State& previous_state) {}
+    CallbackReturn ODescHwInterface::on_error(const rclcpp_lifecycle::State& /*previous_state*/) { return CallbackReturn::SUCCESS; }
 
 
-    vector<hardware_interface::StateInterface> ODescHwInterface::export_state_interfaces() {}
+    vector<hardware_interface::StateInterface> ODescHwInterface::export_state_interfaces() { return vector<hardware_interface::StateInterface>(); }
 
-    vector<hardware_interface::CommandInterface> ODescHwInterface::export_command_interfaces() {}
+    vector<hardware_interface::CommandInterface> ODescHwInterface::export_command_interfaces() { return vector<hardware_interface::CommandInterface>(); }
     
 
-    hardware_interface::return_type ODescHwInterface::read(const rclcpp::Time& time, const rclcpp::Duration& period) {}
+    hardware_interface::return_type ODescHwInterface::read(const rclcpp::Time& /*time*/, const rclcpp::Duration& /*period*/) { return hardware_interface::return_type::OK; }
 
-    hardware_interface::return_type ODescHwInterface::write(const rclcpp::Time& time, const rclcpp::Duration& period) {}
+    hardware_interface::return_type ODescHwInterface::write(const rclcpp::Time& /*time*/, const rclcpp::Duration& /*period*/) { return hardware_interface::return_type::OK; }
 
 
     CallbackReturn ODescHwInterface::error(string msg) {
