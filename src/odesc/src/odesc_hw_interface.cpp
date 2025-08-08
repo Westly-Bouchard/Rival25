@@ -138,10 +138,10 @@ namespace odesc {
             hardware_interface::StateInterface(info_.joints[0].name, hardware_interface::HW_IF_POSITION, &position)
         );
         state_interfaces.emplace_back(
-            hardware_interface::StateInterface(info_.joints[0].name, hardware_interface::HW_IF_VELOCITY, &position)
+            hardware_interface::StateInterface(info_.joints[0].name, hardware_interface::HW_IF_VELOCITY, &velocity)
         );
         state_interfaces.emplace_back(
-            hardware_interface::StateInterface(info_.joints[0].name, hardware_interface::HW_IF_EFFORT, &position)
+            hardware_interface::StateInterface(info_.joints[0].name, hardware_interface::HW_IF_EFFORT, &effort)
         );
 
         return state_interfaces;
