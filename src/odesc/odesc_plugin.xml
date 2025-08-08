@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<library path="odesc">
+  <class name="odesc/VescHwInterface" type="odesc::ODescHwInterface" base_class_type="hardware_interface::ActuatorInterface">
+    <description>
+      Plugin for the ODesc hardware interface
+    </description>
+  </class>
+</library>

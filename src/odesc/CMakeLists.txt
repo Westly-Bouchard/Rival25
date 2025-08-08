@@ -7,9 +7,45 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
+
+find_package(hardware_interface)
+find_package(pluginlib)
+find_package(rclcpp)
+find_package(rclcpp_lifecycle)
+
+# Compile
+add_library(
+  odesc
+  SHARED
+  src/odesc_hw_interface.cpp
+)
+target_compile_features(odesc PUBLIC cxx_std_17)
+target_include_directories(odesc PUBLIC
+$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+$<INSTALL_INTERFACE:include/odesc>
+)
+target_link_libraries(odesc PUBLIC
+  hardware_interface::hardware_interface
+  pluginlib::pluginlib
+  rclcpp::rclcpp
+  rclcpp_lifecycle::rclcpp_lifecycle
+)
+
+# Export hardware plugin
+pluginlib_export_plugin_description_file(hardware_interface odesc_plugin.xml)
+
+# Install
+install(
+  DIRECTORY include
+  DESTINATION include/odesc
+)
+install(TARGETS odesc
+  EXPORT export_odesc
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin
+)
+
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -23,4 +59,6 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
+# Exports
+ament_export_targets(export_odesc HAS_LIBRARY_TARGET)
 ament_package()
