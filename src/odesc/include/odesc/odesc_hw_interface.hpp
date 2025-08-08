@@ -51,9 +51,14 @@ namespace odesc {
 
         void rx_thread_func();
 
-        // Interface parameters
+        // Hardware parameters
         int can_id;
         std::string can_interface;
+        std::string command_mode;
+
+        // Command and state interface variables
+        double command;
+        double position, velocity, effort; // joint states
 
         // Private variables
         int bus_fd;

@@ -1,5 +1,7 @@
 #include "odesc/odesc_hw_interface.hpp"
 
+#include <hardware_interface/types/hardware_interface_type_values.hpp>
+
 #include <linux/can/raw.h>
 #include <net/if.h>
 #include <sys/socket.h>
@@ -16,6 +18,11 @@ namespace odesc {
         if (hardware_interface::ActuatorInterface::on_init(info) != CallbackReturn::SUCCESS) {
             return CallbackReturn::ERROR;
         }
+
+        command = numeric_limits<double>::quiet_NaN();
+        position = 0.0;
+        velocity = 0.0;
+        effort = 0.0;
 
         can_id = stoi(info_.hardware_parameters["can_id"]);
 
@@ -41,6 +48,8 @@ namespace odesc {
 
             can_interface = info_.hardware_parameters["can_interface"];
         }
+
+        command_mode = info_.hardware_parameters["command_mode"];
 
         return CallbackReturn::SUCCESS;
     }
@@ -90,6 +99,7 @@ namespace odesc {
 
         // TODO: Set AxisState to IDLE before ending the loop (just to make sure)
         // Also potentially set configuration parameters
+        // Set controller mode (position, velocity, torque)
 
         return CallbackReturn::SUCCESS;
 
@@ -121,9 +131,37 @@ namespace odesc {
     CallbackReturn ODescHwInterface::on_error(const rclcpp_lifecycle::State& /*previous_state*/) { return CallbackReturn::SUCCESS; }
 
 
-    vector<hardware_interface::StateInterface> ODescHwInterface::export_state_interfaces() { return vector<hardware_interface::StateInterface>(); }
+    vector<hardware_interface::StateInterface> ODescHwInterface::export_state_interfaces() {
+        vector<hardware_interface::StateInterface> state_interfaces;
 
-    vector<hardware_interface::CommandInterface> ODescHwInterface::export_command_interfaces() { return vector<hardware_interface::CommandInterface>(); }
+        state_interfaces.emplace_back(
+            hardware_interface::StateInterface(info_.joints[0].name, hardware_interface::HW_IF_POSITION, &position)
+        );
+        state_interfaces.emplace_back(
+            hardware_interface::StateInterface(info_.joints[0].name, hardware_interface::HW_IF_VELOCITY, &position)
+        );
+        state_interfaces.emplace_back(
+            hardware_interface::StateInterface(info_.joints[0].name, hardware_interface::HW_IF_EFFORT, &position)
+        );
+
+        return state_interfaces;
+    }
+
+    vector<hardware_interface::CommandInterface> ODescHwInterface::export_command_interfaces() {
+        vector<hardware_interface::CommandInterface> command_interfaces;
+
+        command_interfaces.emplace_back(
+            hardware_interface::CommandInterface(info_.joints[0].name, hardware_interface::HW_IF_POSITION, &command)
+        );
+        command_interfaces.emplace_back(
+            hardware_interface::CommandInterface(info_.joints[0].name, hardware_interface::HW_IF_VELOCITY, &command)
+        );
+        command_interfaces.emplace_back(
+            hardware_interface::CommandInterface(info_.joints[0].name, hardware_interface::HW_IF_EFFORT, &command)
+        );
+
+        return command_interfaces;
+    }
     
 
     hardware_interface::return_type ODescHwInterface::read(const rclcpp::Time& /*time*/, const rclcpp::Duration& /*period*/) { return hardware_interface::return_type::OK; }
