@@ -12,7 +12,7 @@
 #include <thread>
 #include <unordered_map>
 
-#include "can/receivers.hpp"
+#include "mixins/receivers.hpp"
 
 using frame = struct can_frame;
 
