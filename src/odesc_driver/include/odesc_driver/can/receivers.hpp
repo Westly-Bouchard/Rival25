@@ -11,9 +11,9 @@ using frame = struct can_frame;
 
 namespace odesc_driver {
 
-bool isSig(const dbcppp::ISignal& sig, const dbcppp::ISignal* mux_sig, frame* f) {
+bool isSig(const dbcppp::ISignal& sig, const dbcppp::ISignal* mux_sig, frame& f) {
     return (sig.MultiplexerIndicator() != dbcppp::ISignal::EMultiplexer::MuxValue ||
-            (mux_sig && mux_sig->Decode(f->data) == sig.MultiplexerSwitchValue()));
+            (mux_sig && mux_sig->Decode(f.data) == sig.MultiplexerSwitchValue()));
 }
 
 class HeartbeatReceiver {
@@ -24,12 +24,12 @@ class HeartbeatReceiver {
         return static_cast<int>(axisCurrentState);
     }
 
-    void updateHeartbeatData(const dbcppp::IMessage* msg, frame* f) {
+    void updateHeartbeatData(const dbcppp::IMessage* msg, frame& f) {
         const dbcppp::ISignal* mux_sig = msg->MuxSignal();
         for (const dbcppp::ISignal& sig : msg->Signals()) {
             if (isSig(sig, mux_sig, f)) {
                 if (sig.Name() == "Axis_State") {
-                    axisCurrentState = sig.RawToPhys(sig.Decode(f->data));
+                    axisCurrentState = sig.RawToPhys(sig.Decode(f.data));
                 }
             }
         }
@@ -51,14 +51,14 @@ class GetEncoderEstimatesReceiver {
         return static_cast<double>(encoderVelEstimate);
     }
 
-    void updateEncoderEstimateData(const dbcppp::IMessage* msg, frame* f) {
+    void updateEncoderEstimateData(const dbcppp::IMessage* msg, frame& f) {
         const dbcppp::ISignal* mux_sig = msg->MuxSignal();
         for (const dbcppp::ISignal& sig : msg->Signals()) {
             if (isSig(sig, mux_sig, f)) {
                 if (sig.Name() == "Vel_Estimate") {
-                    encoderVelEstimate = sig.RawToPhys(sig.Decode(f->data));
+                    encoderVelEstimate = sig.RawToPhys(sig.Decode(f.data));
                 } else if (sig.Name() == "Pos_Estimate") {
-                    encoderPosEstimate = sig.RawToPhys(sig.Decode(f->data));
+                    encoderPosEstimate = sig.RawToPhys(sig.Decode(f.data));
                 }
             }
         }

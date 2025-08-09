@@ -44,7 +44,7 @@ class AxisRxInterface : public HeartbeatReceiver, public GetEncoderEstimatesRece
      */
     std::optional<std::string> shutdown();
 
-   private:
+   protected:
     /**
      * @brief Function that runs the receiving thread
      *
