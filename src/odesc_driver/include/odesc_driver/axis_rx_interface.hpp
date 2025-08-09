@@ -12,11 +12,13 @@
 #include <thread>
 #include <unordered_map>
 
+#include "can/receivers.hpp"
+
 using frame = struct can_frame;
 
 namespace odesc_driver {
 
-class AxisRxInterface {
+class AxisRxInterface : public HeartbeatReceiver, public GetEncoderEstimatesReceiver {
    public:
     /**
      * @brief Construct a new Axis Rx Interface object
