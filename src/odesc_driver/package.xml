@@ -14,7 +14,7 @@
 
   <depend>rclcpp</depend>
   <depend>std_msgs</depend>
-  <depend>dbcppp</depend>
+  <!-- <depend>dbcppp</depend> -->
   <depend>ament_index_cpp</depend>
 
   <export>
