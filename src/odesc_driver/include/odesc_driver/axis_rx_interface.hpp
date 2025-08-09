@@ -26,7 +26,9 @@ class AxisRxInterface : public HeartbeatReceiver, public GetEncoderEstimatesRece
      * @param id Id of the axis on the can bus
      * @param interface Name of interface (default is "can0")
      */
-    AxisRxInterface(int id, std::string interface = "can0");
+    AxisRxInterface();
+
+    std::optional<std::string> setParams(int newId, std::string newInterface = "can0");
 
     /**
      * @brief Attempt to connect to the can bus
@@ -67,8 +69,8 @@ class AxisRxInterface : public HeartbeatReceiver, public GetEncoderEstimatesRece
     std::optional<std::string> retWithError(std::string msg);
 
     // Bus specific data
-    const int id;
-    const std::string interface;
+    int id;
+    std::string interface;
     int bus_fd;
     const int idMask = 0x7c0;
 

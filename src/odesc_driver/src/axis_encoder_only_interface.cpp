@@ -6,8 +6,7 @@ using namespace std;
 
 namespace odesc_driver {
 
-AxisEncoderOnlyInterface::AxisEncoderOnlyInterface(int id, string interface)
-    : AxisRxInterface(id, interface) {}
+AxisEncoderOnlyInterface::AxisEncoderOnlyInterface() : AxisRxInterface() {}
 
 void AxisEncoderOnlyInterface::rx_thread_func() {
     frame f;

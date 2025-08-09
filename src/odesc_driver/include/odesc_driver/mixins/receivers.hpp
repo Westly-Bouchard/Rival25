@@ -7,14 +7,11 @@
 
 #include <atomic>
 
+#include "util.hpp"
+
 using frame = struct can_frame;
 
 namespace odesc_driver {
-
-bool isSig(const dbcppp::ISignal& sig, const dbcppp::ISignal* mux_sig, frame& f) {
-    return (sig.MultiplexerIndicator() != dbcppp::ISignal::EMultiplexer::MuxValue ||
-            (mux_sig && mux_sig->Decode(f.data) == sig.MultiplexerSwitchValue()));
-}
 
 class HeartbeatReceiver {
    public:

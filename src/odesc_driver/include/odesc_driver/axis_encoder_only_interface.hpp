@@ -7,11 +7,12 @@ namespace odesc_driver {
 
 class AxisEncoderOnlyInterface : public AxisRxInterface {
    public:
-    AxisEncoderOnlyInterface(int id, std::string interface = "can0");
+    AxisEncoderOnlyInterface();
 
    private:
     void rx_thread_func() override;
 
+   protected:
     virtual void node_publish_func(bool heartbeat, bool encoder);
 };
 };  // namespace odesc_driver

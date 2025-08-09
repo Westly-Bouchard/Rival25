@@ -16,6 +16,8 @@ class AxisNodePublisher {
         encoderVelPub = node.create_publisher<std_msgs::msg::Float64>("encoderVel", 10);
     }
 
+    AxisNodePublisher(const AxisNodePublisher&) = delete;
+
    protected:
     void publishAxisState(int state) {
         auto msg = std_msgs::msg::Int32();

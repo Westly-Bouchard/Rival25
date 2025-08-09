@@ -5,6 +5,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
+#include <ament_index_cpp/get_package_share_directory.hpp>
 #include <cstdint>
 #include <cstring>
 #include <fstream>
@@ -13,19 +14,12 @@ using namespace std;
 
 namespace odesc_driver {
 
-AxisRxInterface::AxisRxInterface(int id, string interface) : id(id), interface(interface) {
-    if (id < 0 || id > 63) {
-        retWithError("Id must be between 0 and 63 inclusive");
-        return;
-    }
-
-    if (interface.length() >= IF_NAMESIZE) {
-        retWithError(string("Interface length must be less th an %i characters", IF_NAMESIZE));
-        return;
-    }
+AxisRxInterface::AxisRxInterface() : id(0), interface("can0") {
+    string dbc_path =
+        ament_index_cpp::get_package_share_directory("odesc_driver") + "/dbc/odrive-cansimple.dbc";
 
     // Parse dbc
-    ifstream idbc("../dbc/odrive-cansimple.dbc");
+    ifstream idbc(dbc_path);
     net = dbcppp::INetwork::LoadDBCFromIs(idbc);
     if (net.get() == nullptr) {
         retWithError("Failed to load dbc file");
@@ -34,6 +28,21 @@ AxisRxInterface::AxisRxInterface(int id, string interface) : id(id), interface(i
     for (const dbcppp::IMessage& msg : net->Messages()) {
         messages.insert(std::make_pair(msg.Id(), &msg));
     }
+}
+
+optional<string> AxisRxInterface::setParams(int newId, string newInterface) {
+    if (newId < 0 || newId > 63) {
+        return retWithError("Can id must be between 0 and 63 inclusive");
+    }
+
+    if (newInterface.length() > IF_NAMESIZE) {
+        return retWithError("Can interface must be less than 16 characters long");
+    }
+
+    id = newId;
+    interface = newInterface;
+
+    return nullopt;
 }
 
 optional<string> AxisRxInterface::connect() {
@@ -55,7 +64,7 @@ optional<string> AxisRxInterface::connect() {
     struct sockaddr_can addr;
     addr.can_family = AF_CAN;
     addr.can_ifindex = ifr.ifr_ifindex;
-    if (bind(bus_fd, reinterpret_cast<struct sockaddr *>(&addr), sizeof(addr)) < 0) {
+    if (bind(bus_fd, reinterpret_cast<struct sockaddr*>(&addr), sizeof(addr)) < 0) {
         return retWithError("Failed to bind can socket");
     }
 
@@ -99,7 +108,7 @@ optional<string> AxisRxInterface::shutdown() {
 frame AxisRxInterface::readFrame() {
     frame f;
 
-    int nbytes = read(bus_fd, &f, sizeof(frame));
+    read(bus_fd, &f, sizeof(frame));
 
     return f;
 }
