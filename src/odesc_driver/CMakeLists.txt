@@ -5,6 +5,9 @@ if(POLICY CMP0167)
   cmake_policy(SET CMP0167 NEW)
 endif()
 
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
 # Start ROS Package Build
 project(odesc_driver)
 
@@ -20,7 +23,6 @@ find_package(std_msgs REQUIRED)
 
 add_executable(odescAxisNode
 src/axis_rx_interface.cpp
-src/axis_encoder_only_interface.cpp
 src/axis_encoder_only_node.cpp
 src/mixins/util.cpp
 )

@@ -8,7 +8,7 @@ namespace odesc_driver {
 
 AxisEncoderOnlyNode::AxisEncoderOnlyNode()
     : Node("odesc_encoder_only_axis_node"),
-      AxisEncoderOnlyInterface(),
+      AxisRxInterface(),
       AxisNodePublisher(static_cast<rclcpp::Node&>(*this)) {
     this->declare_parameter("can_id", 0);
     this->declare_parameter("can_interface", "can0");
@@ -21,11 +21,15 @@ AxisEncoderOnlyNode::AxisEncoderOnlyNode()
         return;
     }
 
+    createPublishers(id);
+
     auto connectResult = connect();
 
     if (connectResult != nullopt) {
         RCLCPP_ERROR_STREAM(this->get_logger(), connectResult.value());
     }
+
+    RCLCPP_INFO(this->get_logger(), "Successfully connected to axis %i", id);
 }
 
 void AxisEncoderOnlyNode::node_publish_func(MsgType type) {
@@ -43,6 +47,10 @@ void AxisEncoderOnlyNode::node_publish_func(MsgType type) {
 int main(int argc, char** argv) {
     rclcpp::init(argc, argv);
     auto node = std::make_shared<odesc_driver::AxisEncoderOnlyNode>();
+    if (node->getError() != nullopt) {
+        rclcpp::shutdown();
+        return 0;
+    }
     rclcpp::spin(node);
     node->shutdown();
     rclcpp::shutdown();
