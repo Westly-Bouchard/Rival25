@@ -3,14 +3,14 @@
 
 #include <rclcpp/rclcpp.hpp>
 
-#include "axis_encoder_only_interface.hpp"
+#include "axis_rx_interface.hpp"
 #include "mixins/axis_node_publisher.hpp"
 #include "mixins/util.hpp"
 
 namespace odesc_driver {
 
 class AxisEncoderOnlyNode : public rclcpp::Node,
-                            public AxisEncoderOnlyInterface,
+                            public AxisRxInterface,
                             public AxisNodePublisher {
    public:
     AxisEncoderOnlyNode();

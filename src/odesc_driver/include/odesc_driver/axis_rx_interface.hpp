@@ -11,6 +11,7 @@
 #include <unordered_map>
 
 #include "mixins/receivers.hpp"
+#include "mixins/util.hpp"
 
 using frame = struct can_frame;
 
@@ -44,12 +45,27 @@ class AxisRxInterface : public HeartbeatReceiver, public GetEncoderEstimatesRece
      */
     std::optional<std::string> shutdown();
 
+    /**
+     * @brief Get the Error object
+     *
+     * @return std::optional<std::string>
+     */
+    std::optional<std::string> getError();
+
    protected:
     /**
      * @brief Function that runs the receiving thread
      *
      */
-    virtual void rx_thread_func() = 0;
+    void rx_thread_func();
+
+    /**
+     * @brief To be implemented in a child class that is a node, called in the rx thread to trigger
+     * publishes to topics
+     *
+     * @param type type of message to publish
+     */
+    virtual void node_publish_func(MsgType type);
 
     /**
      * @brief Helper function to read a frame from the bus

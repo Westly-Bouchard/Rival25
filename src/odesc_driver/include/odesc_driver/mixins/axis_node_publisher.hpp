@@ -5,20 +5,24 @@
 #include <std_msgs/msg/int32.hpp>
 #include <std_msgs/msg/float64.hpp>
 
+#include <format>
+
 namespace odesc_driver {
 
 class AxisNodePublisher {
    public:
-    AxisNodePublisher(rclcpp::Node& node) {
-        axisStatePub = node.create_publisher<std_msgs::msg::Int32>("axisState", 10);
-
-        encoderPosPub = node.create_publisher<std_msgs::msg::Float64>("encoderPos", 10);
-        encoderVelPub = node.create_publisher<std_msgs::msg::Float64>("encoderVel", 10);
-    }
+    AxisNodePublisher(rclcpp::Node& node) : node(node) {}
 
     AxisNodePublisher(const AxisNodePublisher&) = delete;
 
    protected:
+    void createPublishers(int id) {
+        axisStatePub = node.create_publisher<std_msgs::msg::Int32>(std::format("odescAxis{}/state", id), 10);
+
+        encoderPosPub = node.create_publisher<std_msgs::msg::Float64>(std::format("odescAxis{}/encoderPos", id), 10);
+        encoderVelPub = node.create_publisher<std_msgs::msg::Float64>(std::format("odescAxis{}/encoderVel", id), 10);
+    }
+
     void publishAxisState(int state) {
         auto msg = std_msgs::msg::Int32();
         msg.data = state;
@@ -36,6 +40,8 @@ class AxisNodePublisher {
     }
 
    private:
+    rclcpp::Node& node;
+
     std::shared_ptr<rclcpp::Publisher<std_msgs::msg::Int32>> axisStatePub;
 
     std::shared_ptr<rclcpp::Publisher<std_msgs::msg::Float64>> encoderPosPub;
