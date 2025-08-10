@@ -3,4 +3,9 @@
 
 #include <linux/can/raw.h>
 
+namespace odesc_driver {
+
+enum MsgType { HEARTBEAT = 1, GET_ENCODER_ESTIMATES = 9 };
+};
+
 #endif  // ODESC_DRIVER_MIXINS_UTIL_HPP

@@ -1,6 +1,7 @@
 #include "../include/odesc_driver/axis_encoder_only_interface.hpp"
 
 #include <unistd.h>
+
 #include <cstring>
 
 using namespace std;
@@ -18,16 +19,19 @@ void AxisEncoderOnlyInterface::rx_thread_func() {
         uint64_t data;
         memcpy(&data, f.data, sizeof(uint64_t));
 
-        if (msg_type == 1) {
-            updateHeartbeatData(data);
-            node_publish_func(true, false);
-        } else if (msg_type == 9) {
-            updateEncoderEstimateData(data);
-            node_publish_func(false, true);
+        switch (msg_type) {
+            case MsgType::HEARTBEAT:
+                updateHeartbeatData(data);
+                break;
+            case MsgType::GET_ENCODER_ESTIMATES:
+                updateEncoderEstimateData(data);
+                break;
         }
+
+        node_publish_func(static_cast<MsgType>(msg_type));
     }
 }
 
-void AxisEncoderOnlyInterface::node_publish_func(bool, bool) {}
+void AxisEncoderOnlyInterface::node_publish_func(MsgType) {}
 
 };  // namespace odesc_driver
