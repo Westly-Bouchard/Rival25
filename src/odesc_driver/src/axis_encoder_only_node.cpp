@@ -40,6 +40,9 @@ void AxisEncoderOnlyNode::node_publish_func(MsgType type) {
         case MsgType::GET_ENCODER_ESTIMATES:
             publishEncoderEstimates(getEncoderPosEstimate(), getEncoderVelEstimate());
             break;
+        case MsgType::GET_ENCODER_COUNT:
+            publishEncoderCount(getEncoderCountCPR());
+            break;
     }
 }
 };  // namespace odesc_driver

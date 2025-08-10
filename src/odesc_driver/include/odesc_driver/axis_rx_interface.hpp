@@ -17,7 +17,9 @@ using frame = struct can_frame;
 
 namespace odesc_driver {
 
-class AxisRxInterface : public HeartbeatReceiver, public GetEncoderEstimatesReceiver {
+class AxisRxInterface : public HeartbeatReceiver,
+                        public GetEncoderEstimatesReceiver,
+                        public GetEncoderCountReceiver {
    public:
     /**
      * @brief Construct a new Axis Rx Interface object
@@ -80,7 +82,7 @@ class AxisRxInterface : public HeartbeatReceiver, public GetEncoderEstimatesRece
      * @param msg error message to report
      * @return std::optional<std::string> will never return nullopt
      */
-    std::optional<std::string> retWithError(std::string msg);
+    std::optional<std::string> withError(std::string msg);
 
     // Bus specific data
     int id;

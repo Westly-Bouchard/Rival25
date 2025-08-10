@@ -17,11 +17,11 @@ AxisRxInterface::AxisRxInterface() : id(0), interface("can0") {}
 
 optional<string> AxisRxInterface::setParams(int newId, string newInterface) {
     if (newId < 0 || newId > 63) {
-        return retWithError("Can id must be between 0 and 63 inclusive");
+        return withError("Can id must be between 0 and 63 inclusive");
     }
 
     if (newInterface.length() > IF_NAMESIZE) {
-        return retWithError("Can interface must be less than 16 characters long");
+        return withError("Can interface must be less than 16 characters long");
     }
 
     id = newId;
@@ -35,14 +35,14 @@ optional<string> AxisRxInterface::connect() {
     bus_fd = socket(PF_CAN, SOCK_RAW, CAN_RAW);
 
     if (bus_fd < 0) {
-        return retWithError("Failed to open socket");
+        return withError("Failed to open socket");
     }
 
     // Set interface name
     struct ifreq ifr;
     strncpy(&ifr.ifr_name[0], interface.c_str(), interface.length() + 1);
     if (ioctl(bus_fd, SIOCGIFINDEX, &ifr) < 0) {
-        return retWithError("Failed to set can socket name via ioctl()");
+        return withError("Failed to set can socket name via ioctl()");
     }
 
     // Create address and bind to it
@@ -50,13 +50,13 @@ optional<string> AxisRxInterface::connect() {
     addr.can_family = AF_CAN;
     addr.can_ifindex = ifr.ifr_ifindex;
     if (bind(bus_fd, reinterpret_cast<struct sockaddr*>(&addr), sizeof(addr)) < 0) {
-        return retWithError("Failed to bind can socket");
+        return withError("Failed to bind can socket");
     }
 
     // Disable local message loopback
     int loopback = 0;
     if (setsockopt(bus_fd, SOL_CAN_RAW, CAN_RAW_LOOPBACK, &loopback, sizeof(loopback)) < 0) {
-        return retWithError("Failed to disable local loopback");
+        return withError("Failed to disable local loopback");
     }
 
     // Set filtering to only receive frames from the correct id
@@ -64,7 +64,7 @@ optional<string> AxisRxInterface::connect() {
     rfilter.can_id = id << 5;
     rfilter.can_mask = idMask;
     if (setsockopt(bus_fd, SOL_CAN_RAW, CAN_RAW_FILTER, &rfilter, sizeof(rfilter)) < 0) {
-        return retWithError("Failed to configure can filters");
+        return withError("Failed to configure can filters");
     }
 
     // Set up receive thread
@@ -105,10 +105,13 @@ void AxisRxInterface::rx_thread_func() {
 
         switch (msg_type) {
             case MsgType::HEARTBEAT:
-                updateHeartbeatData(data);
+                updateHeartbeat(data);
                 break;
             case MsgType::GET_ENCODER_ESTIMATES:
-                updateEncoderEstimateData(data);
+                updateEncoderEstimates(data);
+                break;
+            case MsgType::GET_ENCODER_COUNT:
+                updateEncoderCount(data);
                 break;
         }
 
@@ -126,7 +129,7 @@ frame AxisRxInterface::readFrame() {
     return f;
 }
 
-optional<string> AxisRxInterface::retWithError(string msg) {
+optional<string> AxisRxInterface::withError(string msg) {
     error = make_optional<string>(msg);
     return error;
 }
