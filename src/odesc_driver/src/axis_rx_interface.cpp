@@ -105,10 +105,13 @@ void AxisRxInterface::rx_thread_func() {
 
         switch (msg_type) {
             case MsgType::HEARTBEAT:
-                updateHeartbeatData(data);
+                updateHeartbeat(data);
                 break;
             case MsgType::GET_ENCODER_ESTIMATES:
-                updateEncoderEstimateData(data);
+                updateEncoderEstimates(data);
+                break;
+            case MsgType::GET_ENCODER_COUNT:
+                updateEncoderCount(data);
                 break;
         }
 

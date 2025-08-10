@@ -17,7 +17,9 @@ using frame = struct can_frame;
 
 namespace odesc_driver {
 
-class AxisRxInterface : public HeartbeatReceiver, public GetEncoderEstimatesReceiver {
+class AxisRxInterface : public HeartbeatReceiver,
+                        public GetEncoderEstimatesReceiver,
+                        public GetEncoderCountReceiver {
    public:
     /**
      * @brief Construct a new Axis Rx Interface object
