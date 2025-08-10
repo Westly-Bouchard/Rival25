@@ -28,13 +28,14 @@ AxisEncoderOnlyNode::AxisEncoderOnlyNode()
     }
 }
 
-void AxisEncoderOnlyNode::node_publish_func(bool heartbeat, bool encoder) {
-    if (heartbeat) {
-        publishAxisState(getAxisCurrentState());
-    }
-
-    if (encoder) {
-        publishEncoderEstimates(getEncoderPosEstimate(), getEncoderVelEstimate());
+void AxisEncoderOnlyNode::node_publish_func(MsgType type) {
+    switch (type) {
+        case MsgType::HEARTBEAT:
+            publishAxisState(getAxisCurrentState());
+            break;
+        case MsgType::GET_ENCODER_ESTIMATES:
+            publishEncoderEstimates(getEncoderPosEstimate(), getEncoderVelEstimate());
+            break;
     }
 }
 };  // namespace odesc_driver

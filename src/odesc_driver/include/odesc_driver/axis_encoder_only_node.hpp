@@ -5,6 +5,7 @@
 
 #include "axis_encoder_only_interface.hpp"
 #include "mixins/axis_node_publisher.hpp"
+#include "mixins/util.hpp"
 
 namespace odesc_driver {
 
@@ -15,7 +16,7 @@ class AxisEncoderOnlyNode : public rclcpp::Node,
     AxisEncoderOnlyNode();
 
    protected:
-    void node_publish_func(bool heartbeat, bool encoder) override;
+    void node_publish_func(MsgType type) override;
 };
 };  // namespace odesc_driver
 

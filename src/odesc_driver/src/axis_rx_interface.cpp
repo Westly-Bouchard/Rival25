@@ -5,7 +5,6 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-#include <ament_index_cpp/get_package_share_directory.hpp>
 #include <cstdint>
 #include <cstring>
 #include <fstream>
@@ -14,21 +13,7 @@ using namespace std;
 
 namespace odesc_driver {
 
-AxisRxInterface::AxisRxInterface() : id(0), interface("can0") {
-    string dbc_path =
-        ament_index_cpp::get_package_share_directory("odesc_driver") + "/dbc/odrive-cansimple.dbc";
-
-    // Parse dbc
-    ifstream idbc(dbc_path);
-    net = dbcppp::INetwork::LoadDBCFromIs(idbc);
-    if (net.get() == nullptr) {
-        retWithError("Failed to load dbc file");
-        return;
-    }
-    for (const dbcppp::IMessage& msg : net->Messages()) {
-        messages.insert(std::make_pair(msg.Id(), &msg));
-    }
-}
+AxisRxInterface::AxisRxInterface() : id(0), interface("can0") {}
 
 optional<string> AxisRxInterface::setParams(int newId, string newInterface) {
     if (newId < 0 || newId > 63) {
