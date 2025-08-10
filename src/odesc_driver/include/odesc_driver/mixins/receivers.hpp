@@ -1,8 +1,6 @@
 #ifndef ODESC_DRIVER_CAN_RECEIVERS_HPP
 #define ODESC_DRIVER_CAN_RECEIVERS_HPP
 
-#include <dbcppp/CApi.h>
-#include <dbcppp/Network.h>
 #include <linux/can/raw.h>
 
 #include <atomic>
@@ -21,15 +19,8 @@ class HeartbeatReceiver {
         return static_cast<int>(axisCurrentState);
     }
 
-    void updateHeartbeatData(const dbcppp::IMessage* msg, frame& f) {
-        const dbcppp::ISignal* mux_sig = msg->MuxSignal();
-        for (const dbcppp::ISignal& sig : msg->Signals()) {
-            if (isSig(sig, mux_sig, f)) {
-                if (sig.Name() == "Axis_State") {
-                    axisCurrentState = sig.RawToPhys(sig.Decode(f.data));
-                }
-            }
-        }
+    void updateHeartbeatData(uint64_t data) {
+        axisCurrentState = data >> 32 & 0xFF;
     }
 
    private:
@@ -48,17 +39,10 @@ class GetEncoderEstimatesReceiver {
         return static_cast<double>(encoderVelEstimate);
     }
 
-    void updateEncoderEstimateData(const dbcppp::IMessage* msg, frame& f) {
-        const dbcppp::ISignal* mux_sig = msg->MuxSignal();
-        for (const dbcppp::ISignal& sig : msg->Signals()) {
-            if (isSig(sig, mux_sig, f)) {
-                if (sig.Name() == "Vel_Estimate") {
-                    encoderVelEstimate = sig.RawToPhys(sig.Decode(f.data));
-                } else if (sig.Name() == "Pos_Estimate") {
-                    encoderPosEstimate = sig.RawToPhys(sig.Decode(f.data));
-                }
-            }
-        }
+    void updateEncoderEstimateData(uint64_t data) {
+        float* estimates = reinterpret_cast<float*>(&data);
+        encoderPosEstimate = estimates[0];
+        encoderVelEstimate = estimates[1];
     }
 
    private:

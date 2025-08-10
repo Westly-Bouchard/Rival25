@@ -1,8 +1,6 @@
 #ifndef ODESC_DRIVER_AXIS_RX_INTERFACE_HPP
 #define ODESC_DRIVER_AXIS_RX_INTERFACE_HPP
 
-#include <dbcppp/CApi.h>
-#include <dbcppp/Network.h>
 #include <linux/can/raw.h>
 
 #include <atomic>
@@ -80,10 +78,6 @@ class AxisRxInterface : public HeartbeatReceiver, public GetEncoderEstimatesRece
     // Rx thread data
     std::atomic<bool> rx_running;
     std::thread rx_thread;
-
-    // Dbc parsing data
-    std::unique_ptr<dbcppp::INetwork> net;
-    std::unordered_map<uint64_t, const dbcppp::IMessage *> messages;
 };
 
 };  // namespace odesc_driver
