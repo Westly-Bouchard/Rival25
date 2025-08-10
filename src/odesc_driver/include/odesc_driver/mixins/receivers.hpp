@@ -20,11 +20,21 @@ class HeartbeatReceiver {
     }
 
     void updateHeartbeatData(uint64_t data) {
+        axisError = data & 0xFFFFFFFF;
         axisCurrentState = data >> 32 & 0xFF;
+        motorErrorFlag = data >> 40 & 0x1;
+        encoderErrorFlag = data >> 48 & 0x1;
+        controllerErrorFlag = data >> 56 & 0x1;
+        trajectoryDoneFlag = data >> 63;
     }
 
    private:
+    std::atomic<uint32_t> axisError;
     std::atomic<uint8_t> axisCurrentState;
+    std::atomic<bool> motorErrorFlag;
+    std::atomic<bool> encoderErrorFlag;
+    std::atomic<bool> controllerErrorFlag;
+    std::atomic<bool> trajectoryDoneFlag;
 };
 
 class GetEncoderEstimatesReceiver {
