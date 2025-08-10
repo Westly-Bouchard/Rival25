@@ -25,7 +25,7 @@ class AxisNodePublisher {
             std::format("odescAxis{}/encoderVel", id), 10);
 
         encoderCountPub = node.create_publisher<std_msgs::msg::Int32>(
-            std::format("odescAxis{}/encoderCountCPR"), 10);
+            std::format("odescAxis{}/encoderCountCPR", id), 10);
     }
 
     void publishAxisState(int state) {
