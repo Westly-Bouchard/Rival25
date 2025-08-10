@@ -82,7 +82,7 @@ class AxisRxInterface : public HeartbeatReceiver,
      * @param msg error message to report
      * @return std::optional<std::string> will never return nullopt
      */
-    std::optional<std::string> retWithError(std::string msg);
+    std::optional<std::string> withError(std::string msg);
 
     // Bus specific data
     int id;
