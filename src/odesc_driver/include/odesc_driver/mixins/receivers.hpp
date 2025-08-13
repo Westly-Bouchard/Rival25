@@ -1,5 +1,5 @@
-#ifndef ODESC_DRIVER_CAN_RECEIVERS_HPP
-#define ODESC_DRIVER_CAN_RECEIVERS_HPP
+#ifndef ODESC_DRIVER_RECEIVERS_HPP
+#define ODESC_DRIVER_RECEIVERS_HPP
 
 #include <linux/can/raw.h>
 
@@ -78,4 +78,4 @@ class GetEncoderCountReceiver {
 
 };  // namespace odesc_driver
 
-#endif  // ODESC_DRIVER_CAN_RECEIVERS_HPP
+#endif  // ODESC_DRIVER_RECEIVERS_HPP
