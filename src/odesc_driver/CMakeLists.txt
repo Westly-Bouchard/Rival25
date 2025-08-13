@@ -21,14 +21,23 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 
-add_executable(odescAxisNode
+add_executable(odescAxisEncoderOnlyNode
 src/axis_rx_interface.cpp
 src/axis_encoder_only_node.cpp
+src/mixins/util.cpp
+)
+ament_target_dependencies(odescAxisEncoderOnlyNode rclcpp std_msgs)
+
+add_executable(odescAxisNode
+src/axis_rx_interface.cpp
+src/axis_trx_interface.cpp
+src/axis_node.cpp
 src/mixins/util.cpp
 )
 ament_target_dependencies(odescAxisNode rclcpp std_msgs)
 
 install(TARGETS
+  odescAxisEncoderOnlyNode
   odescAxisNode
   DESTINATION lib/${PROJECT_NAME}
 )
