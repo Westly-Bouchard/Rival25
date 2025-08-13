@@ -4,6 +4,7 @@
 #include <linux/can/raw.h>
 
 #include <cstdint>
+#include <cstring>
 #include <format>
 #include <functional>
 #include <optional>
@@ -26,6 +27,21 @@ class SetAxisRequestedStateTransmitter {
         }
 
         return writeFrame(static_cast<uint32_t>(state), MsgType::SET_AXIS_REQUESTED_STATE);
+    }
+
+   private:
+    std::function<std::optional<std::string>(uint64_t, int)> writeFrame;
+};
+
+class SetInputPosTransmitter {
+   public:
+    SetInputPosTransmitter(std::function<std::optional<std::string>(uint64_t, int)> wf)
+        : writeFrame(std::move(wf)) {}
+
+    std::optional<std::string> setInputPos(float pos) {
+        uint64_t data;
+        memcpy(&data, &pos, sizeof(pos));
+        return writeFrame(data, MsgType::SET_INPUT_POS);
     }
 
    private:

@@ -12,7 +12,9 @@
 using frame = struct can_frame;
 
 namespace odesc_driver {
-class AxisTrxInterface : public AxisRxInterface, public SetAxisRequestedStateTransmitter {
+class AxisTrxInterface : public AxisRxInterface,
+                         public SetAxisRequestedStateTransmitter,
+                         public SetInputPosTransmitter {
    public:
     AxisTrxInterface();
 

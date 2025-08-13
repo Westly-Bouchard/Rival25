@@ -33,8 +33,12 @@ AxisNode::AxisNode()
     RCLCPP_INFO(this->get_logger(), "Successfully connected to axis %i", id);
 
     axisRequestedStateSub = create_subscription<std_msgs::msg::Int32>(
-        format("odesc{}/axisRequestedState", id), 10,
+        format("odescAxis{}/axisRequestedState", id), 10,
         bind(&AxisNode::axisRequestedStateCallback, this, placeholders::_1));
+
+    inputPosSub = create_subscription<std_msgs::msg::Float32>(
+        format("odescAxis{}/inputPos", id), 10,
+        bind(&AxisNode::inputPosCallback, this, placeholders::_1));
 }
 
 void AxisNode::node_publish_func(MsgType type) {
@@ -53,6 +57,14 @@ void AxisNode::node_publish_func(MsgType type) {
 
 void AxisNode::axisRequestedStateCallback(std_msgs::msg::Int32::UniquePtr msg) {
     optional<string> result = setAxisRequestedState(msg->data);
+
+    if (result != nullopt) {
+        RCLCPP_ERROR_STREAM(this->get_logger(), result.value());
+    }
+}
+
+void AxisNode::inputPosCallback(std_msgs::msg::Float32::UniquePtr msg) {
+    optional<string> result = setInputPos(msg->data);
 
     if (result != nullopt) {
         RCLCPP_ERROR_STREAM(this->get_logger(), result.value());
