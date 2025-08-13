@@ -26,7 +26,7 @@ class SetAxisRequestedStateTransmitter {
             return std::make_optional<std::string>(std::format("Invalid axis state: {}", state));
         }
 
-        return writeFrame(static_cast<uint32_t>(state), MsgType::SET_AXIS_REQUESTED_STATE);
+        return writeFrame(static_cast<uint32_t>(state), CmdType::SET_AXIS_REQUESTED_STATE);
     }
 
    private:
@@ -41,7 +41,7 @@ class SetInputPosTransmitter {
     std::optional<std::string> setInputPos(float pos) {
         uint64_t data;
         memcpy(&data, &pos, sizeof(pos));
-        return writeFrame(data, MsgType::SET_INPUT_POS);
+        return writeFrame(data, CmdType::SET_INPUT_POS);
     }
 
    private:
