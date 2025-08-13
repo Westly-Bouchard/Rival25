@@ -5,7 +5,12 @@
 
 namespace odesc_driver {
 
-enum MsgType { HEARTBEAT = 1, GET_ENCODER_ESTIMATES = 9, GET_ENCODER_COUNT = 10 };
+enum MsgType {
+    HEARTBEAT = 1,
+    GET_ENCODER_ESTIMATES = 9,
+    GET_ENCODER_COUNT = 10,
+    SET_AXIS_REQUESTED_STATE = 7
 };
+};  // namespace odesc_driver
 
 #endif  // ODESC_DRIVER_MIXINS_UTIL_HPP

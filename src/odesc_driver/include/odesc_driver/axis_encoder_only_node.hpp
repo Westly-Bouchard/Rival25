@@ -9,13 +9,11 @@
 
 namespace odesc_driver {
 
-class AxisEncoderOnlyNode : public rclcpp::Node,
-                            public AxisRxInterface,
-                            public AxisNodePublisher {
+class AxisEncoderOnlyNode : public rclcpp::Node, public AxisRxInterface, public AxisNodePublisher {
    public:
     AxisEncoderOnlyNode();
 
-   protected:
+   private:
     void node_publish_func(MsgType type) override;
 };
 };  // namespace odesc_driver

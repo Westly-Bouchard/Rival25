@@ -7,16 +7,18 @@
 #include <string>
 
 #include "axis_rx_interface.hpp"
+#include "mixins/transmitters.hpp"
 
 using frame = struct can_frame;
 
 namespace odesc_driver {
-class AxisTrxInterface : public AxisRxInterface {
+class AxisTrxInterface : public AxisRxInterface, public SetAxisRequestedStateTransmitter {
    public:
     AxisTrxInterface();
 
-   private:
     std::optional<std::string> writeFrame(uint64_t data, int msgType);
+
+   private:
 };
 };  // namespace odesc_driver
 
