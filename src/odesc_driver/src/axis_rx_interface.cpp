@@ -13,7 +13,7 @@ using namespace std;
 
 namespace odesc_driver {
 
-AxisRxInterface::AxisRxInterface() : id(0), interface("can0") {}
+AxisRxInterface::AxisRxInterface() : id(0), interface("can0"), connected(false) {}
 
 optional<string> AxisRxInterface::setParams(int newId, string newInterface) {
     if (newId < 0 || newId > 63) {
@@ -71,6 +71,7 @@ optional<string> AxisRxInterface::connect() {
     rx_running = true;
     rx_thread = thread(&AxisRxInterface::rx_thread_func, this);
 
+    connected = true;
     return nullopt;
 }
 

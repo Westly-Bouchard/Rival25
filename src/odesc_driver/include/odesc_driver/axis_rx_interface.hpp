@@ -89,6 +89,7 @@ class AxisRxInterface : public HeartbeatReceiver,
     std::string interface;
     int bus_fd;
     const int idMask = 0x7c0;
+    bool connected;
 
     // Axis state data
     std::optional<std::string> error;
