@@ -40,6 +40,37 @@ install(TARGETS
   DESTINATION lib/${PROJECT_NAME}
 )
 
+add_library(${PROJECT_NAME}
+  src/axis_rx_interface.cpp
+  src/axis_trx_interface.cpp
+)
+
+target_include_directories(${PROJECT_NAME}
+  PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>  # when installed
+)
+
+# Install headers
+install(
+  DIRECTORY include/
+  DESTINATION include
+)
+
+# Install the library
+install(
+  TARGETS ${PROJECT_NAME}
+  EXPORT export_${PROJECT_NAME}
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin
+)
+
+# Export targets and include directories to downstream packages
+ament_export_targets(export_${PROJECT_NAME} HAS_LIBRARY_TARGET)
+ament_export_dependencies(rclcpp)
+ament_export_include_directories(include)
+
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
