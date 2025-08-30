@@ -11,6 +11,8 @@ AxisTrxInterface::AxisTrxInterface()
       SetAxisRequestedStateTransmitter(std::bind(&AxisTrxInterface::writeFrame, this,
                                                  std::placeholders::_1, std::placeholders::_2)),
       SetInputPosTransmitter(std::bind(&AxisTrxInterface::writeFrame, this, std::placeholders::_1,
+                                       std::placeholders::_2)),
+      SetInputVelTransmitter(std::bind(&AxisTrxInterface::writeFrame, this, std::placeholders::_1,
                                        std::placeholders::_2)) {}
 
 optional<string> AxisTrxInterface::writeFrame(uint64_t data, int msgType) {

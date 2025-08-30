@@ -47,6 +47,21 @@ class SetInputPosTransmitter {
    private:
     std::function<std::optional<std::string>(uint64_t, int)> writeFrame;
 };
+
+class SetInputVelTransmitter {
+   public:
+    SetInputVelTransmitter(std::function<std::optional<std::string>(uint64_t, int)> wf)
+        : writeFrame(std::move(wf)) {}
+
+    std::optional<std::string> setInputVel(float vel) {
+        uint64_t data;
+        memcpy(&data, &vel, sizeof(vel));
+        return writeFrame(data, CmdType::SET_INPUT_VEL);
+    }
+
+   private:
+    std::function<std::optional<std::string>(uint64_t, int)> writeFrame;
+};
 }  // namespace odesc_driver
 
 #endif  // ODESC_DRIVER_TRANSMITTERS_HPP
