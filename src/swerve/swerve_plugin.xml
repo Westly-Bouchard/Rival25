@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<library path="swerve">
+  <class name="swerve/SwerveModuleHWI" type="swerve::SwerveModuleHWI" base_class_type="hardware_interface::SystemInterface">
+    <description>
+      Hardware plugin for Minuteman swerve module
+    </description>
+  </class>
+</library>

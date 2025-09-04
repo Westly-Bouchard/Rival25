@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="swerve_module">
+    <link name="base_link"></link>
+    <link name="rotator"></link>
+    <link name="wheel"></link>
+
+    <joint name="azimuth" type="continuous">
+        <parent link="base_link" />
+        <child link="rotator" />
+    </joint>
+
+    <joint name="drive" type="continuous">
+        <parent link="rotator" />
+        <child link="wheel" />
+    </joint>
+
+    <ros2_control name="swerve_module" type="system">
+        <hardware>
+            <plugin>swerve/SwerveModuleHWI</plugin>
+
+            <param name="azimuth_encoder_id">1</param>
+            <param name="azimuth_motor_id">11</param>
+            <param name="drive_motor_id">12</param>
+        </hardware>
+
+        <joint name="azimuth">
+            <command_interface name="az_target_position"></command_interface>
+            <state_interface name="azimuth_position"></state_interface>
+        </joint>
+
+        <joint name="drive">
+            <command_interface name="drive_target_velocity"></command_interface>
+        </joint>
+    </ros2_control>
+</robot>

@@ -40,7 +40,7 @@ install(TARGETS
   DESTINATION lib/${PROJECT_NAME}
 )
 
-add_library(${PROJECT_NAME}
+add_library(${PROJECT_NAME} SHARED
   src/axis_rx_interface.cpp
   src/axis_trx_interface.cpp
 )
@@ -50,6 +50,8 @@ target_include_directories(${PROJECT_NAME}
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>  # when installed
 )
+
+# set_target_properties(${PROJECT_NAME} PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 # Install headers
 install(
