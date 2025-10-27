@@ -2,34 +2,139 @@
 
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="swerve_module">
     <link name="base_link"></link>
-    <link name="rotator"></link>
-    <link name="wheel"></link>
 
-    <joint name="azimuth" type="continuous">
+    <link name="m1Rotator"></link>
+    <link name="m1Wheel"></link>
+
+    <link name="m2Rotator"></link>
+    <link name="m2Wheel"></link>
+
+    <link name="m3Rotator"></link>
+    <link name="m3Wheel"></link>
+
+    <link name="m4Rotator"></link>
+    <link name="m4Wheel"></link>
+
+    <joint name="m1Azimuth" type="continuous">
         <parent link="base_link" />
-        <child link="rotator" />
+        <child link="m1Rotator" />
     </joint>
 
-    <joint name="drive" type="continuous">
-        <parent link="rotator" />
-        <child link="wheel" />
+    <joint name="m2Azimuth" type="continuous">
+        <parent link="base_link" />
+        <child link="m2Rotator" />
     </joint>
 
-    <ros2_control name="swerve_module" type="system">
+    <joint name="m3Azimuth" type="continuous">
+        <parent link="base_link" />
+        <child link="m3Rotator" />
+    </joint>
+
+    <joint name="m4Azimuth" type="continuous">
+        <parent link="base_link" />
+        <child link="m4Rotator" />
+    </joint>
+
+    <joint name="m1Drive" type="continuous">
+        <parent link="m1Rotator" />
+        <child link="m1Wheel" />
+    </joint>
+
+    <joint name="m2Drive" type="continuous">
+        <parent link="m2Rotator" />
+        <child link="m2Wheel" />
+    </joint>
+
+    <joint name="m3Drive" type="continuous">
+        <parent link="m3Rotator" />
+        <child link="m3Wheel" />
+    </joint>
+
+    <joint name="m4Drive" type="continuous">
+        <parent link="m4Rotator" />
+        <child link="m4Wheel" />
+    </joint>
+
+    <ros2_control name="swerveModule1" type="system">
         <hardware>
             <plugin>swerve/SwerveModuleHWI</plugin>
+
+            <param name="module_number">1</param>
 
             <param name="azimuth_encoder_id">1</param>
             <param name="azimuth_motor_id">11</param>
             <param name="drive_motor_id">12</param>
         </hardware>
 
-        <joint name="azimuth">
+        <joint name="m1Azimuth">
             <command_interface name="az_target_position"></command_interface>
             <state_interface name="azimuth_position"></state_interface>
         </joint>
 
-        <joint name="drive">
+        <joint name="m1Drive">
+            <command_interface name="drive_target_velocity"></command_interface>
+        </joint>
+    </ros2_control>
+
+    <ros2_control name="swerveModule2" type="system">
+        <hardware>
+            <plugin>swerve/SwerveModuleHWI</plugin>
+
+            <param name="module_number">2</param>
+
+            <param name="azimuth_encoder_id">2</param>
+            <param name="azimuth_motor_id">13</param>
+            <param name="drive_motor_id">14</param>
+        </hardware>
+
+        <joint name="m2Azimuth">
+            <command_interface name="az_target_position"></command_interface>
+            <state_interface name="azimuth_position"></state_interface>
+        </joint>
+
+        <joint name="m2Drive">
+            <command_interface name="drive_target_velocity"></command_interface>
+        </joint>
+    </ros2_control>
+
+    <ros2_control name="swerveModule3" type="system">
+        <hardware>
+            <plugin>swerve/SwerveModuleHWI</plugin>
+
+            <param name="module_number">3</param>
+
+            <param name="azimuth_encoder_id">3</param>
+            <param name="azimuth_motor_id">15</param>
+            <param name="drive_motor_id">16</param>
+        </hardware>
+
+        <joint name="m3Azimuth">
+            <command_interface name="az_target_position"></command_interface>
+            <state_interface name="azimuth_position"></state_interface>
+        </joint>
+
+        <joint name="m3Drive">
+            <command_interface name="drive_target_velocity"></command_interface>
+        </joint>
+    </ros2_control>
+
+    <ros2_control name="swerveModule4" type="system">
+        <hardware>
+            <plugin>swerve/SwerveModuleHWI</plugin>
+
+            <param name="module_number">4</param>
+
+            <param name="azimuth_encoder_id">4</param>
+            <param name="azimuth_motor_id">17</param>
+            <param name="drive_motor_id">18</param>
+        </hardware>
+
+        <joint name="m4Azimuth">
+            <command_interface name="az_target_position"></command_interface>
+            <state_interface name="azimuth_position"></state_interface>
+        </joint>
+
+        <joint name="m4Drive">
             <command_interface name="drive_target_velocity"></command_interface>
         </joint>
     </ros2_control>

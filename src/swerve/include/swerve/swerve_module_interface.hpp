@@ -40,6 +40,8 @@ class SwerveModuleHWI : public hardware_interface::SystemInterface {
     odesc_driver::AxisTrxInterface* azimuthMotor;
     odesc_driver::AxisTrxInterface* driveMotor;
 
+    std::string moduleName;
+
     double azPosition;
 
     double azTargetPosition;

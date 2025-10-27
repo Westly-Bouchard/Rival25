@@ -17,7 +17,15 @@ find_package(pluginlib REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
 
+find_package(std_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
+
 find_package(odesc_driver REQUIRED)
+
+add_executable(testPublisher src/test_publisher.cpp)
+ament_target_dependencies(testPublisher rclcpp std_msgs sensor_msgs)
+
+install(TARGETS testPublisher DESTINATION lib/${PROJECT_NAME})
 
 # Compile
 add_library(

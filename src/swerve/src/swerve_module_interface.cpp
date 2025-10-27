@@ -16,6 +16,8 @@ CallbackReturn SwerveModuleHWI::on_init(const hardware_interface::HardwareInfo& 
         return CallbackReturn::ERROR;
     }
 
+    moduleName = "m" + info_.hardware_parameters["module_number"];
+
     int azimuthEncoderId = stoi(info_.hardware_parameters["azimuth_encoder_id"]);
     int azimuthMotorId = stoi(info_.hardware_parameters["azimuth_motor_id"]);
     int driveMotorId = stoi(info_.hardware_parameters["drive_motor_id"]);
@@ -86,7 +88,7 @@ CallbackReturn SwerveModuleHWI::on_cleanup(const rclcpp_lifecycle::State& /*prev
 vector<hardware_interface::StateInterface> SwerveModuleHWI::export_state_interfaces() {
     vector<hardware_interface::StateInterface> interfaces;
     // TODO: Figure out what to put in the first argument here
-    interfaces.emplace_back("azimuth", "azimuth_position", &azPosition);
+    interfaces.emplace_back(moduleName + "Azimuth", "azimuth_position", &azPosition);
 
     return interfaces;
 }
@@ -94,8 +96,8 @@ vector<hardware_interface::StateInterface> SwerveModuleHWI::export_state_interfa
 vector<hardware_interface::CommandInterface> SwerveModuleHWI::export_command_interfaces() {
     vector<hardware_interface::CommandInterface> interfaces;
 
-    interfaces.emplace_back("azimuth", "az_target_position", &azTargetPosition);
-    interfaces.emplace_back("drive", "drive_target_velocity", &driveTargetSpeed);
+    interfaces.emplace_back(moduleName + "Azimuth", "az_target_position", &azTargetPosition);
+    interfaces.emplace_back(moduleName + "Drive", "drive_target_velocity", &driveTargetSpeed);
 
     return interfaces;
 }
@@ -150,8 +152,8 @@ hardware_interface::return_type SwerveModuleHWI::read(const rclcpp::Time& /*time
 
 hardware_interface::return_type SwerveModuleHWI::write(const rclcpp::Time& /*time*/,
                                                        const rclcpp::Duration& /*period*/) {
-    // azimuthMotor->setInputPos(azTargetPosition);
-    // driveMotor->setInputVel(driveTargetSpeed);
+    azimuthMotor->setInputPos(azTargetPosition);
+    driveMotor->setInputVel(driveTargetSpeed);
 
     // RCLCPP_INFO(get_logger(), "AZ target tosition is: %f", azTargetPosition);
     // RCLCPP_INFO(get_logger(), "Drive target speed is: %f", driveTargetSpeed);
