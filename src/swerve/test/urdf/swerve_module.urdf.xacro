@@ -3,75 +3,76 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="swerve_module">
     <link name="base_link"></link>
 
-    <link name="m1Rotator"></link>
-    <link name="m1Wheel"></link>
+    <link name="FRRotator"></link>
+    <link name="FRWheel"></link>
 
-    <link name="m2Rotator"></link>
-    <link name="m2Wheel"></link>
+    <link name="FLRotator"></link>
+    <link name="FLWheel"></link>
 
-    <link name="m3Rotator"></link>
-    <link name="m3Wheel"></link>
+    <link name="BLRotator"></link>
+    <link name="BLWheel"></link>
 
-    <link name="m4Rotator"></link>
-    <link name="m4Wheel"></link>
+    <link name="BRRotator"></link>
+    <link name="BRWheel"></link>
 
-    <joint name="m1Azimuth" type="continuous">
+    <joint name="FRAzimuth" type="continuous">
         <parent link="base_link" />
-        <child link="m1Rotator" />
+        <child link="FRRotator" />
     </joint>
 
-    <joint name="m2Azimuth" type="continuous">
+    <joint name="FLAzimuth" type="continuous">
         <parent link="base_link" />
-        <child link="m2Rotator" />
+        <child link="FLRotator" />
     </joint>
 
-    <joint name="m3Azimuth" type="continuous">
+    <joint name="BLAzimuth" type="continuous">
         <parent link="base_link" />
-        <child link="m3Rotator" />
+        <child link="BLRotator" />
     </joint>
 
-    <joint name="m4Azimuth" type="continuous">
+    <joint name="BRAzimuth" type="continuous">
         <parent link="base_link" />
-        <child link="m4Rotator" />
+        <child link="BRRotator" />
     </joint>
 
-    <joint name="m1Drive" type="continuous">
-        <parent link="m1Rotator" />
-        <child link="m1Wheel" />
+    <joint name="FRDrive" type="continuous">
+        <parent link="FRRotator" />
+        <child link="FRWheel" />
     </joint>
 
-    <joint name="m2Drive" type="continuous">
-        <parent link="m2Rotator" />
-        <child link="m2Wheel" />
+    <joint name="FLDrive" type="continuous">
+        <parent link="FLRotator" />
+        <child link="FLWheel" />
     </joint>
 
-    <joint name="m3Drive" type="continuous">
-        <parent link="m3Rotator" />
-        <child link="m3Wheel" />
+    <joint name="BLDrive" type="continuous">
+        <parent link="BLRotator" />
+        <child link="BLWheel" />
     </joint>
 
-    <joint name="m4Drive" type="continuous">
-        <parent link="m4Rotator" />
-        <child link="m4Wheel" />
+    <joint name="BRDrive" type="continuous">
+        <parent link="BRRotator" />
+        <child link="BRWheel" />
     </joint>
 
     <ros2_control name="swerveModule1" type="system">
         <hardware>
             <plugin>swerve/SwerveModuleHWI</plugin>
 
-            <param name="module_number">1</param>
+            <param name="module_number">FR</param>
 
             <param name="azimuth_encoder_id">1</param>
             <param name="azimuth_motor_id">11</param>
             <param name="drive_motor_id">12</param>
         </hardware>
 
-        <joint name="m1Azimuth">
+        <joint name="FRAzimuth">
             <command_interface name="az_target_position"></command_interface>
             <state_interface name="azimuth_position"></state_interface>
+            <state_interface name="az_motor_pos"></state_interface>
         </joint>
 
-        <joint name="m1Drive">
+        <joint name="FRDrive">
             <command_interface name="drive_target_velocity"></command_interface>
         </joint>
     </ros2_control>
@@ -80,19 +81,20 @@
         <hardware>
             <plugin>swerve/SwerveModuleHWI</plugin>
 
-            <param name="module_number">2</param>
+            <param name="module_number">FL</param>
 
             <param name="azimuth_encoder_id">2</param>
             <param name="azimuth_motor_id">13</param>
             <param name="drive_motor_id">14</param>
         </hardware>
 
-        <joint name="m2Azimuth">
+        <joint name="FLAzimuth">
             <command_interface name="az_target_position"></command_interface>
             <state_interface name="azimuth_position"></state_interface>
+            <state_interface name="az_motor_pos"></state_interface>
         </joint>
 
-        <joint name="m2Drive">
+        <joint name="FLDrive">
             <command_interface name="drive_target_velocity"></command_interface>
         </joint>
     </ros2_control>
@@ -101,19 +103,20 @@
         <hardware>
             <plugin>swerve/SwerveModuleHWI</plugin>
 
-            <param name="module_number">3</param>
+            <param name="module_number">BL</param>
 
             <param name="azimuth_encoder_id">3</param>
             <param name="azimuth_motor_id">15</param>
             <param name="drive_motor_id">16</param>
         </hardware>
 
-        <joint name="m3Azimuth">
+        <joint name="BLAzimuth">
             <command_interface name="az_target_position"></command_interface>
             <state_interface name="azimuth_position"></state_interface>
+            <state_interface name="az_motor_pos"></state_interface>
         </joint>
 
-        <joint name="m3Drive">
+        <joint name="BLDrive">
             <command_interface name="drive_target_velocity"></command_interface>
         </joint>
     </ros2_control>
@@ -122,19 +125,20 @@
         <hardware>
             <plugin>swerve/SwerveModuleHWI</plugin>
 
-            <param name="module_number">4</param>
+            <param name="module_number">BR</param>
 
             <param name="azimuth_encoder_id">4</param>
             <param name="azimuth_motor_id">17</param>
             <param name="drive_motor_id">18</param>
         </hardware>
 
-        <joint name="m4Azimuth">
+        <joint name="BRAzimuth">
             <command_interface name="az_target_position"></command_interface>
             <state_interface name="azimuth_position"></state_interface>
+            <state_interface name="az_motor_pos"></state_interface>
         </joint>
 
-        <joint name="m4Drive">
+        <joint name="BRDrive">
             <command_interface name="drive_target_velocity"></command_interface>
         </joint>
     </ros2_control>

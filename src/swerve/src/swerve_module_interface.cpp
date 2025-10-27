@@ -16,7 +16,7 @@ CallbackReturn SwerveModuleHWI::on_init(const hardware_interface::HardwareInfo& 
         return CallbackReturn::ERROR;
     }
 
-    moduleName = "m" + info_.hardware_parameters["module_number"];
+    moduleName = info_.hardware_parameters["module_number"];
 
     int azimuthEncoderId = stoi(info_.hardware_parameters["azimuth_encoder_id"]);
     int azimuthMotorId = stoi(info_.hardware_parameters["azimuth_motor_id"]);
@@ -87,8 +87,9 @@ CallbackReturn SwerveModuleHWI::on_cleanup(const rclcpp_lifecycle::State& /*prev
 
 vector<hardware_interface::StateInterface> SwerveModuleHWI::export_state_interfaces() {
     vector<hardware_interface::StateInterface> interfaces;
-    // TODO: Figure out what to put in the first argument here
+
     interfaces.emplace_back(moduleName + "Azimuth", "azimuth_position", &azPosition);
+    interfaces.emplace_back(moduleName + "Azimuth", "az_motor_pos", &azMotorPos);
 
     return interfaces;
 }
@@ -143,6 +144,7 @@ CallbackReturn SwerveModuleHWI::on_error(const rclcpp_lifecycle::State& /*previo
 hardware_interface::return_type SwerveModuleHWI::read(const rclcpp::Time& /*time*/,
                                                       const rclcpp::Duration& /*period*/) {
     azPosition = azimuthEncoder->getEncoderCountCPR() / pow(2, 14);
+    azMotorPos = azimuthMotor->getEncoderPosEstimate();
 
     // TODO: Need to check for axis errors here and eventually handle reading other data from the
     // module

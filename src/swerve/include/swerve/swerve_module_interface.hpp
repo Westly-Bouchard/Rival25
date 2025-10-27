@@ -43,6 +43,7 @@ class SwerveModuleHWI : public hardware_interface::SystemInterface {
     std::string moduleName;
 
     double azPosition;
+    double azMotorPos;
 
     double azTargetPosition;
     double driveTargetSpeed;
