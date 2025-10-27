@@ -9,7 +9,10 @@ using namespace std;
 
 namespace swerve {
 
-SwerveModuleHWI::SwerveModuleHWI() {}
+SwerveModuleHWI::SwerveModuleHWI() {
+    azTargetPosition = 0.0;
+    driveTargetSpeed = 0.0;
+}
 
 CallbackReturn SwerveModuleHWI::on_init(const hardware_interface::HardwareInfo& info) {
     if (hardware_interface::SystemInterface::on_init(info) != CallbackReturn::SUCCESS) {
@@ -105,8 +108,8 @@ vector<hardware_interface::CommandInterface> SwerveModuleHWI::export_command_int
 
 CallbackReturn SwerveModuleHWI::on_activate(const rclcpp_lifecycle::State& /*previous state*/) {
     // TODO: Create enum for axis states
-    azimuthMotor->setAxisRequestedState(8);
-    driveMotor->setAxisRequestedState(8);
+    // azimuthMotor->setAxisRequestedState(8);
+    // driveMotor->setAxisRequestedState(8);
 
     // Technically these method calls can fail, but the only failure path comes from being passed an
     // invalid state, which we aren't doing here. For now, this is fine.

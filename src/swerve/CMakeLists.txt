@@ -13,6 +13,7 @@ endif()
 find_package(ament_cmake REQUIRED)
 
 find_package(hardware_interface REQUIRED)
+find_package(controller_interface REQUIRED)
 find_package(pluginlib REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
@@ -32,6 +33,7 @@ add_library(
   swerve
   SHARED
   src/swerve_module_interface.cpp
+  src/swerve_controller.cpp
 )
 
 target_compile_features(swerve PUBLIC cxx_std_17)
@@ -43,6 +45,7 @@ $<INSTALL_INTERFACE:include/swerve>
 
 target_link_libraries(swerve PUBLIC
   hardware_interface::hardware_interface
+  controller_interface::controller_interface
   pluginlib::pluginlib
   rclcpp::rclcpp
   rclcpp_lifecycle::rclcpp_lifecycle
@@ -51,6 +54,9 @@ target_link_libraries(swerve PUBLIC
 
 # Export hardware plugin
 pluginlib_export_plugin_description_file(hardware_interface swerve_plugin.xml)
+
+# Export controller plugin
+pluginlib_export_plugin_description_file(controller_interface swerve_plugin.xml)
 
 # Install
 install(

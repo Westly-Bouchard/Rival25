@@ -21,7 +21,7 @@ def generate_launch_description():
         [
             FindPackageShare("swerve"),
             "config",
-            "swerve_module_controllers.yaml"
+            "swerve_controller.yaml"
         ]
     )
 
@@ -38,23 +38,35 @@ def generate_launch_description():
         parameters=[robot_description],
     )
 
-    drive_controller_spawner = Node(
+    # drive_controller_spawner = Node(
+    #     package="controller_manager",
+    #     executable="spawner",
+    #     arguments=["forward_position_controller", "--param-file", robot_controllers]
+    # )
+
+    # azimuth_controller_spawner = Node(
+    #     package="controller_manager",
+    #     executable="spawner",
+    #     arguments=["forward_velocity_controller", "--param-file", robot_controllers]
+    # )
+
+    swerve_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["forward_position_controller", "--param-file", robot_controllers]
+        arguments=["swerve_controller", "--param-file", robot_controllers]
     )
 
-    azimuth_controller_spawner = Node(
+    joint_state_broadcaster = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["forward_velocity_controller", "--param-file", robot_controllers]
+        arguments=["joint_state_broadcaster", "--param-file", robot_controllers]
     )
 
     nodes = [
         control_node,
         robot_state_pub_node,
-        drive_controller_spawner,
-        azimuth_controller_spawner
+        swerve_controller_spawner,
+        joint_state_broadcaster
     ]
 
     return LaunchDescription(nodes)
