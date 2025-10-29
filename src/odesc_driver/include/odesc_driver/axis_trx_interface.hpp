@@ -15,7 +15,8 @@ namespace odesc_driver {
 class AxisTrxInterface : public AxisRxInterface,
                          public SetAxisRequestedStateTransmitter,
                          public SetInputPosTransmitter,
-                         public SetInputVelTransmitter {
+                         public SetInputVelTransmitter,
+                         public SetLinearCountTransmitter {
    public:
     AxisTrxInterface();
 
