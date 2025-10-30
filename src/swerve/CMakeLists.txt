@@ -17,14 +17,15 @@ find_package(controller_interface REQUIRED)
 find_package(pluginlib REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
+find_package(realtime_tools)
 
-find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
 
 find_package(odesc_driver REQUIRED)
 
 add_executable(testPublisher src/test_publisher.cpp)
-ament_target_dependencies(testPublisher rclcpp std_msgs sensor_msgs)
+ament_target_dependencies(testPublisher rclcpp geometry_msgs sensor_msgs)
 
 install(TARGETS testPublisher DESTINATION lib/${PROJECT_NAME})
 
@@ -43,13 +44,24 @@ $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
 $<INSTALL_INTERFACE:include/swerve>
 )
 
-target_link_libraries(swerve PUBLIC
-  hardware_interface::hardware_interface
-  controller_interface::controller_interface
-  pluginlib::pluginlib
-  rclcpp::rclcpp
-  rclcpp_lifecycle::rclcpp_lifecycle
-  odesc_driver::odesc_driver
+# target_link_libraries(swerve PUBLIC
+#   hardware_interface::hardware_interface
+#   controller_interface::controller_interface
+#   pluginlib::pluginlib
+#   rclcpp::rclcpp
+#   rclcpp_lifecycle::rclcpp_lifecycle
+#   odesc_driver::odesc_driver
+# )
+
+ament_target_dependencies(swerve
+  hardware_interface
+  controller_interface
+  pluginlib
+  rclcpp
+  rclcpp_lifecycle
+  odesc_driver
+  realtime_tools
+  geometry_msgs
 )
 
 # Export hardware plugin
