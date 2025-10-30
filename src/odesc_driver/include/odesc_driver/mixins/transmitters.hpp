@@ -44,8 +44,6 @@ class SetInputPosTransmitter {
         int16_t vel_ff = 0;
         int16_t torque_ff = 0;
 
-        // memcpy(&data, &pos, sizeof(pos));
-
         memcpy(((uint8_t*) &data) + 0, &pos, sizeof(pos));
         memcpy(((uint8_t*) &data) + 4, &vel_ff, sizeof(vel_ff));
         memcpy(((uint8_t*) &data) + 6, &torque_ff, sizeof(torque_ff));
@@ -62,8 +60,13 @@ class SetInputVelTransmitter {
         : writeFrame(std::move(wf)) {}
 
     std::optional<std::string> setInputVel(float vel) {
-        uint64_t data;
-        memcpy(&data, &vel, sizeof(vel));
+        uint64_t data = 0;
+
+        int32_t torque_ff = 0;
+
+        memcpy(((uint8_t*) &data) + 0, &vel, sizeof(vel));
+        memcpy(((uint8_t*) &data) + 4, &torque_ff, sizeof(torque_ff));
+
         return writeFrame(data, CmdType::SET_INPUT_VEL);
     }
 
@@ -77,7 +80,10 @@ class SetLinearCountTransmitter {
         : writeFrame(std::move(wf)) {}
 
     std::optional<std::string> setLinearCount(int count) {
-        return writeFrame(static_cast<uint32_t>(count), CmdType::SET_LINEAR_COUNT);
+        uint64_t data = 0;
+
+        memcpy(((uint8_t*) &data) + 0, &count, sizeof(count));
+        return writeFrame(data, CmdType::SET_LINEAR_COUNT);
     }
 
    private:
