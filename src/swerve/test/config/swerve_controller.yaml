@@ -12,14 +12,15 @@ swerve_controller:
       BR: [7.0, 8.0]
 
     azimuth_offsets:
-      FR: 1.0
-      FL: 0.3599
-      BL: 3.0
-      BR: 4.0
+      FR: 0.4393
+      FL: 0.3598
+      BL: 0.7091
+      BR: 0.9820
 
     wheel_radius: 0.0301625
     az_gear_ratio: 2.0
     drive_gear_ratio: 6.0
+    center_dist: 0.0993
 
 joint_state_broadcaster:
   ros__parameters:
@@ -32,4 +33,4 @@ joint_state_broadcaster:
       - BRAzimuth
 
     interfaces:
-      - azimuth_position
+      - az_motor_pos

@@ -62,8 +62,8 @@
             <param name="module_number">FR</param>
 
             <param name="azimuth_encoder_id">1</param>
-            <param name="azimuth_motor_id">11</param>
-            <param name="drive_motor_id">12</param>
+            <param name="azimuth_motor_id">3</param>
+            <param name="drive_motor_id">5</param>
         </hardware>
 
         <joint name="FRAzimuth">
@@ -83,9 +83,9 @@
 
             <param name="module_number">FL</param>
 
-            <param name="azimuth_encoder_id">2</param>
-            <param name="azimuth_motor_id">13</param>
-            <param name="drive_motor_id">14</param>
+            <param name="azimuth_encoder_id">7</param>
+            <param name="azimuth_motor_id">9</param>
+            <param name="drive_motor_id">11</param>
         </hardware>
 
         <joint name="FLAzimuth">
@@ -105,9 +105,9 @@
 
             <param name="module_number">BL</param>
 
-            <param name="azimuth_encoder_id">3</param>
+            <param name="azimuth_encoder_id">13</param>
             <param name="azimuth_motor_id">15</param>
-            <param name="drive_motor_id">16</param>
+            <param name="drive_motor_id">17</param>
         </hardware>
 
         <joint name="BLAzimuth">
@@ -127,9 +127,9 @@
 
             <param name="module_number">BR</param>
 
-            <param name="azimuth_encoder_id">4</param>
-            <param name="azimuth_motor_id">17</param>
-            <param name="drive_motor_id">18</param>
+            <param name="azimuth_encoder_id">19</param>
+            <param name="azimuth_motor_id">21</param>
+            <param name="drive_motor_id">23</param>
         </hardware>
 
         <joint name="BRAzimuth">

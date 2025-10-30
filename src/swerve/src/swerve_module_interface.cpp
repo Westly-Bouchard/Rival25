@@ -1,8 +1,10 @@
 #include "../include/swerve/swerve_module_interface.hpp"
 
+#include <chrono>
 #include <optional>
 #include <rclcpp/rclcpp.hpp>
 #include <string>
+#include <thread>
 
 using namespace odesc_driver;
 using namespace std;
@@ -75,6 +77,7 @@ CallbackReturn SwerveModuleHWI::on_configure(const rclcpp_lifecycle::State& /*pr
     if (hadError) {
         return CallbackReturn::ERROR;
     } else {
+        // azimuthMotor->setLinearCount(0);
         return CallbackReturn::SUCCESS;
     }
 }
@@ -108,11 +111,14 @@ vector<hardware_interface::CommandInterface> SwerveModuleHWI::export_command_int
 
 CallbackReturn SwerveModuleHWI::on_activate(const rclcpp_lifecycle::State& /*previous state*/) {
     // TODO: Create enum for axis states
-    // azimuthMotor->setAxisRequestedState(8);
-    // driveMotor->setAxisRequestedState(8);
 
-    // Technically these method calls can fail, but the only failure path comes from being passed an
-    // invalid state, which we aren't doing here. For now, this is fine.
+    azimuthMotor->setLinearCount(0);
+
+    azimuthMotor->setAxisRequestedState(8);
+    driveMotor->setAxisRequestedState(8);
+
+    // Technically these method calls can fail, but the only failure path comes from being
+    // passed an invalid state, which we aren't doing here. For now, this is fine.
     return CallbackReturn::SUCCESS;
 }
 
@@ -157,11 +163,16 @@ hardware_interface::return_type SwerveModuleHWI::read(const rclcpp::Time& /*time
 
 hardware_interface::return_type SwerveModuleHWI::write(const rclcpp::Time& /*time*/,
                                                        const rclcpp::Duration& /*period*/) {
+    // static int count = 0;
+
+    // if (count < 500) {
+    //     // Give some settling time for the encoder values
+    //     count++;
+    //     return hardware_interface::return_type::OK;
+    // }
+
     azimuthMotor->setInputPos(azTargetPosition);
     driveMotor->setInputVel(driveTargetSpeed);
-
-    // RCLCPP_INFO(get_logger(), "AZ target tosition is: %f", azTargetPosition);
-    // RCLCPP_INFO(get_logger(), "Drive target speed is: %f", driveTargetSpeed);
 
     // TODO: Error checking?
 

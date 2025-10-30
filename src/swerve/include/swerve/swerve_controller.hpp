@@ -1,7 +1,10 @@
 #ifndef SWERVE_CONTROLLER_HPP
 #define SWERVE_CONTROLLER_HPP
 
+#include <realtime_tools/realtime_buffer.h>
+
 #include <controller_interface/controller_interface.hpp>
+#include <geometry_msgs/msg/twist.hpp>
 #include <rclcpp/rclcpp.hpp>
 #include <utility>
 #include <vector>
@@ -45,6 +48,18 @@ class SwerveController : public controller_interface::ControllerInterface {
     double azimuthGearRatio;
 
     double driveGearRatio;
+
+    double centerDistance;
+
+    std::vector<double> azTargets;
+    std::vector<double> driveTargets;
+
+    rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr cmd_sub;
+
+    realtime_tools::RealtimeBuffer<geometry_msgs::msg::Twist> cmd_buff;
+
+    void cmdCallback(const geometry_msgs::msg::Twist::SharedPtr msg);
+    void computeKinematics(const geometry_msgs::msg::Twist&);
 };
 };  // namespace swerve
 

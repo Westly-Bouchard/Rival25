@@ -25,6 +25,16 @@ def generate_launch_description():
         ]
     )
 
+    joy_node = Node(
+        package="joy",
+        executable="joy_node"
+    )
+
+    test_node = Node(
+        package="swerve",
+        executable="testPublisher"
+    )
+
     control_node = Node(
         package="controller_manager",
         executable="ros2_control_node",
@@ -38,17 +48,11 @@ def generate_launch_description():
         parameters=[robot_description],
     )
 
-    # drive_controller_spawner = Node(
-    #     package="controller_manager",
-    #     executable="spawner",
-    #     arguments=["forward_position_controller", "--param-file", robot_controllers]
-    # )
-
-    # azimuth_controller_spawner = Node(
-    #     package="controller_manager",
-    #     executable="spawner",
-    #     arguments=["forward_velocity_controller", "--param-file", robot_controllers]
-    # )
+    drive_controller_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["forward_position_controller", "--param-file", robot_controllers]
+    )
 
     swerve_controller_spawner = Node(
         package="controller_manager",
@@ -63,10 +67,12 @@ def generate_launch_description():
     )
 
     nodes = [
+        joy_node,
+        test_node,
         control_node,
         robot_state_pub_node,
         swerve_controller_spawner,
-        joint_state_broadcaster
+        # joint_state_broadcaster
     ]
 
     return LaunchDescription(nodes)

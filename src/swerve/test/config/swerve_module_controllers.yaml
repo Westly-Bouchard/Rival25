@@ -6,7 +6,7 @@ forward_position_controller:
   ros__parameters:
     type: forward_command_controller/ForwardCommandController
     joints:
-      - azimuth
+      - FRAzimuth
     interface_name: az_target_position
 
 forward_velocity_controller:
