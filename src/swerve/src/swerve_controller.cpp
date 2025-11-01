@@ -8,17 +8,11 @@ using namespace std;
 
 namespace swerve {
 
-double absMin(double one, double two) {
-    if (abs(one) < abs(two)) {
-        return one;
-    }
-
-    return two;
-}
-
 SwerveController::SwerveController() {
     azTargets = {0.0, 0.0, 0.0, 0.0};
     driveTargets = {0.0, 0.0, 0.0, 0.0};
+    flipped = {false, false, false, false};
+    prevAzTargets = {0.0, 0.0, 0.0, 0.0};
 }
 
 controller_interface::CallbackReturn SwerveController::on_init() {
@@ -97,6 +91,8 @@ controller_interface::return_type SwerveController::update(const rclcpp::Time& /
     // Get most recent input to the controller
     const auto& cmd = cmd_buff.readFromRT();
 
+    // RCLCPP_INFO(get_node()->get_logger(), "xVel: %f", cmd->linear.x);
+
     // Kinematics calculations
     double vX = cmd->linear.x - (cmd->angular.z * centerDistance);
     double vY = cmd->linear.y + (cmd->angular.z * -1 * centerDistance);
@@ -128,7 +124,7 @@ controller_interface::return_type SwerveController::update(const rclcpp::Time& /
 
         double azTargetPos = fmod((azTargets.at(i) / (2 * M_PI)) + azimuthOffsets.at(i), 1.0);
 
-        double delta = -1 * (azTargetPos - azCurrentPos) * azimuthGearRatio;
+        double delta = azTargetPos - azCurrentPos;
 
         if (delta > 0.5) {
             delta -= 1.0;
@@ -136,24 +132,49 @@ controller_interface::return_type SwerveController::update(const rclcpp::Time& /
             delta += 1.0;
         }
 
-        // bool err = 0;
+        double absDelta = fabs(delta);
+
+        if (!flipped.at(i)) {
+            if (absDelta > 0.25) flipped.at(i) = true;
+        } else {
+            if (absDelta < 0.1) flipped.at(i) = false;
+        }
+
+        if (flipped.at(i)) {
+            delta = fmod(delta + 0.5, 1.0);
+            driveTargets.at(i) *= -1;
+        }
+
+        if (delta > 0.5) {
+            delta -= 1.0;
+        } else if (delta < -0.5) {
+            delta += 1.0;
+        }
+
+        delta *= -1 * azimuthGearRatio;
+
+        // static int count = 0;
+        // if (i == 3 && count <= 5) {
+        //     RCLCPP_INFO(get_node()->get_logger(), "Control iteration:");
+        //     RCLCPP_INFO(get_node()->get_logger(), "\tazCurrentPos: %f", azCurrentPos);
+        //     RCLCPP_INFO(get_node()->get_logger(), "\tazTargetPos: %f", azTargetPos);
+        //     RCLCPP_INFO(get_node()->get_logger(), "\tdelta: %f", delta);
+        //     RCLCPP_INFO(get_node()->get_logger(), "\tcurrentMotorPos: %f",
+        //                 state_interfaces_.at(7).get_value());
+        //     RCLCPP_INFO(get_node()->get_logger(), "\ttargetMotorPos: %f",
+        //                 state_interfaces_.at((i * 2) + 1).get_value() + delta);
+        //     count++;
+        // }
 
         command_interfaces_.at(i * 2).set_value(state_interfaces_.at((i * 2) + 1).get_value() +
                                                 delta);
 
         // Drive conversion math
         // Need to convert from m/s to turns per second
-
-        // RCLCPP_INFO(get_node()->get_logger(), "Drive target: %f", driveTargets.at(i));
-
         int multiplier = i == 0 || i == 3 ? -1 : 1;
 
         command_interfaces_.at((i * 2) + 1)
             .set_value(multiplier * driveTargets.at(i) * driveGearRatio / (2 * M_PI * wheelRadius));
-
-        // if (err) {
-        //     return controller_interface::return_type::ERROR;
-        // }
     }
 
     return controller_interface::return_type::OK;

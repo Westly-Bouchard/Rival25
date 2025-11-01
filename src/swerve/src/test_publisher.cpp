@@ -1,3 +1,4 @@
+#include <cmath>
 #include <geometry_msgs/msg/twist.hpp>
 #include <rclcpp/rclcpp.hpp>
 #include <sensor_msgs/msg/joy.hpp>
@@ -21,9 +22,9 @@ class TestPublisher : public rclcpp::Node {
     void joyCallback(const sensor_msgs::msg::Joy::SharedPtr msg) {
         auto cmdMsg = geometry_msgs::msg::Twist();
 
-        cmdMsg.linear.set__y(msg->axes[0] * 0.5);
-        cmdMsg.linear.set__x(msg->axes[1] * 0.5);
-        cmdMsg.angular.set__z(msg->axes[2] * 0.5);
+        if (fabs(msg->axes[0]) > 0.1) cmdMsg.linear.set__y(msg->axes[0] * 0.75);
+        if (fabs(msg->axes[1]) > 0.1) cmdMsg.linear.set__x(msg->axes[1] * 0.75);
+        if (fabs(msg->axes[2]) > 0.1) cmdMsg.angular.set__z(msg->axes[2]);
 
         cmdPub->publish(cmdMsg);
     }

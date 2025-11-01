@@ -53,6 +53,8 @@ class SwerveController : public controller_interface::ControllerInterface {
 
     std::vector<double> azTargets;
     std::vector<double> driveTargets;
+    std::vector<bool> flipped;
+    std::vector<double> prevAzTargets;
 
     rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr cmd_sub;
 
