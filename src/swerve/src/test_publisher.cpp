@@ -23,10 +23,10 @@ class TestPublisher : public rclcpp::Node {
     rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr cmdPub;
 
     void joyCallback(const sensor_msgs::msg::Joy::SharedPtr msg) {
-        if (msg->buttons[10 == 1]) {
+        if (msg->buttons[10] == 1) {
             count++;
 
-            if (count > 100) {
+            if (count > 50) {
                 int result = system("shutdown -h now");
 
                 count = 0;
