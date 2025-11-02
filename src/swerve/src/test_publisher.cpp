@@ -1,5 +1,8 @@
+#include <linux/reboot.h>
+#include <sys/reboot.h>
+#include <unistd.h>
+
 #include <cmath>
-#include <cstdlib>
 #include <geometry_msgs/msg/twist.hpp>
 #include <rclcpp/rclcpp.hpp>
 #include <sensor_msgs/msg/joy.hpp>
@@ -27,7 +30,9 @@ class TestPublisher : public rclcpp::Node {
             count++;
 
             if (count > 50) {
-                int result = system("shutdown -h now");
+                sync();
+
+                reboot(LINUX_REBOOT_CMD_POWER_OFF);
 
                 count = 0;
             }
