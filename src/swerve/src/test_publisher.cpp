@@ -1,4 +1,5 @@
 #include <cmath>
+#include <cstdlib>
 #include <geometry_msgs/msg/twist.hpp>
 #include <rclcpp/rclcpp.hpp>
 #include <sensor_msgs/msg/joy.hpp>
@@ -6,6 +7,7 @@
 class TestPublisher : public rclcpp::Node {
    public:
     TestPublisher() : Node("swerve_test_publisher") {
+        count = 0;
         joySub = this->create_subscription<sensor_msgs::msg::Joy>(
             "joy", 10, std::bind(&TestPublisher::joyCallback, this, std::placeholders::_1));
 
@@ -15,11 +17,21 @@ class TestPublisher : public rclcpp::Node {
     }
 
    private:
+    int count;
     rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr joySub;
 
     rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr cmdPub;
 
     void joyCallback(const sensor_msgs::msg::Joy::SharedPtr msg) {
+        if (msg->buttons[10 == 1]) {
+            count++;
+
+            if (count > 100) {
+                int result = system("shutdown -h now");
+
+                count = 0;
+            }
+        }
         auto cmdMsg = geometry_msgs::msg::Twist();
 
         if (fabs(msg->axes[0]) > 0.1) cmdMsg.linear.set__y(msg->axes[0] * 0.75);
