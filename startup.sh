@@ -3,7 +3,7 @@
 source /opt/ros/jazzy/setup.bash
 
 cd /home/west/Rival25
-git clone
+git pull
 colcon build --packages-select swerve
 
 source install/setup.bash
