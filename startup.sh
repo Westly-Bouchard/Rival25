@@ -2,9 +2,9 @@
 
 source /opt/ros/jazzy/setup.bash
 
-cd /home/west/Rival25
-git pull
-colcon build --packages-select swerve
+# cd /home/west/Rival25
+# git pull
+# colcon build --packages-select swerve
 
 source install/setup.bash
 
